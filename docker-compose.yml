@@ -1,0 +1,26 @@
+version: '3'
+
+networks:
+  formation-php-bases:
+services:
+  php-formation-php:
+    build:
+      context: ./php/
+      dockerfile: Dockerfile
+    container_name: php-formation-php
+    networks:
+      - formation-php-bases
+    volumes:
+      - $PWD/www/:/var/www/
+  nginx-formation-php:
+    image: nginx
+    container_name: nginx-formation-php
+    networks:
+      - formation-php-bases
+    volumes:
+      - $PWD/nginx/:/etc/nginx/conf.d/
+      - $PWD/www/:/var/www/
+    ports:
+      - '4001:80'
+    depends_on:
+      - php-formation-php
